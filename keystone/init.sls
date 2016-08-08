@@ -1,13 +1,14 @@
 {% set keystone_db_pwd = "password" %}
 {% set server = {
-    'roles': ['admin', 'demo']
+    'roles': ['admin', 'user']
   }
 %}
-{% set connectiondetails = {
+{% set hostname = "controller.de.mo" %}
+{# set connectiondetails = {
     'token': 'token',
-    'endpoint': 'http://controller1.de.mo:35356/v2.0'
+    'endpoint': 'http://<hostname>:35357/v2.0'
   }
-%}
+#}
 
 keystone_database:
   mysql_database.present:
@@ -42,13 +43,6 @@ keystone_pkgs:
       - apache2-mod_wsgi
       - memcached
       - python-python-memcached
-
-#keystone_salt_config:
-#  file.managed:
-#    - name: /etc/salt/minion.d/keystone.conf
-#    - template: jinja
-#    - source: salt://openstack/keystone/files/salt-minion.conf
-#    - mode: 600
 
 keystone_service:
   service.running:
@@ -87,26 +81,27 @@ apache2:
     - name: "a2enmod version"
   service.running:
     - enable: True
+    - watch:
+      - cmd: apache2
+      - file: /etc/sysconfig/apache2
+      - file: /etc/apache2/conf.d/wsgi-keystone.conf
 
 keystone_keystone_service:
   keystone.service_present:
     - name: keystone
     - service_type: identity
     - description: "OpenStack identity"
-    - token: {{ connectiondetails.token }}
-    - endpoint: {{connectiondetails.endpoint }}
     - require:
       - cmd: keystone_syncdb
+    - watch:
       - service: apache2
 
 keystone_keystone_endpoint:
   keystone.endpoint_present:
     - name: keystone
-    - publicurl: http://controller.de.mo:5000/v2.0
-    - internalurl: http://controller.de.mo:5000/v2.0
-    - adminurl: http://controller.de.mo:35357/v2.0
-    - token: {{ connectiondetails.token }}
-    - endpoint: {{connectiondetails.endpoint }}
+    - publicurl: http://{{ hostname }}:5000/v2.0
+    - internalurl: http://{{ hostname }}:5000/v2.0
+    - adminurl: http://{{ hostname }}:35357/v2.0
     - require:
       - keystone: keystone_keystone_service
 
@@ -114,8 +109,6 @@ keystone_service_tenant:
   keystone.tenant_present:
     - name: service
     - description: "Service Project"
-    - token: {{ connectiondetails.token }}
-    - endpoint: {{connectiondetails.endpoint }}
     - require:
       - cmd: keystone_syncdb
       - service: apache2
@@ -124,16 +117,12 @@ keystone_admin_tenant:
   keystone.tenant_present:
     - name: admin
     - description: "Admin Project"
-    - token: {{ connectiondetails.token }}
-    - endpoint: {{connectiondetails.endpoint }}
     - require:
       - keystone: keystone_service_tenant
 
 keystone_roles:
   keystone.role_present:
     - names: {{ server.roles }}
-    - token: {{ connectiondetails.token }}
-    - endpoint: {{connectiondetails.endpoint }}
     - require:
       - keystone: keystone_service_tenant
 
@@ -146,8 +135,6 @@ keystone_admin_user:
     - roles:
         admin:
           - admin
-    - token: {{ connectiondetails.token }}
-    - endpoint: {{connectiondetails.endpoint }}
     - require:
       - keystone: keystone_admin_tenant
       - keystone: keystone_roles

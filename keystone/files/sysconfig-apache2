@@ -1,3 +1,5 @@
+{% set hostname = "controller.de.mo" %}
+
 ## Path:	Network/WWW/Apache2
 ## Description:	Configuration for Apache 2
 
@@ -176,7 +178,7 @@ APACHE_SERVERADMIN=""
 # You will have to access it by its address anyway, and this will make 
 # redirections work in a sensible way.
 #
-APACHE_SERVERNAME="controller.de.mo"
+APACHE_SERVERNAME="{{ hostname }}"
 
 ## Type:	integer
 ## Default:	2

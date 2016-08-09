@@ -1,4 +1,4 @@
-{% set hostname = "controller.de.mo" %}
+{% from "openstack/horizon/map.jinja" import server with context %}
 
 import os
 
@@ -146,7 +146,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 #    ('http://cluster2.example.com:5000/v2.0', 'cluster2'),
 #]
 
-OPENSTACK_HOST = "{{ hostname }}"
+OPENSTACK_HOST = "{{ server.host }}"
 OPENSTACK_KEYSTONE_URL = "http://%s:5000/v2.0" % OPENSTACK_HOST
 OPENSTACK_KEYSTONE_DEFAULT_ROLE = "user"
 

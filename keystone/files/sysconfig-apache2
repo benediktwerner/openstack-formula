@@ -1,4 +1,4 @@
-{% set hostname = "controller.de.mo" %}
+{% from "openstack/keystone/map.jinja" import server with context %}
 
 ## Path:	Network/WWW/Apache2
 ## Description:	Configuration for Apache 2
@@ -7,11 +7,11 @@
 ## Default:	""
 ## ServiceRestart: apache2
 #
-# Here you can name files, separated by spaces, that should be Include'd from 
-# httpd.conf. 
+# Here you can name files, separated by spaces, that should be Include'd from
+# httpd.conf.
 #
-# This allows you to add e.g. VirtualHost statements without touching 
-# /etc/apache2/httpd.conf itself, which makes upgrading easier. 
+# This allows you to add e.g. VirtualHost statements without touching
+# /etc/apache2/httpd.conf itself, which makes upgrading easier.
 #
 APACHE_CONF_INCLUDE_FILES=""
 
@@ -19,8 +19,8 @@ APACHE_CONF_INCLUDE_FILES=""
 ## Default:	""
 ## ServiceRestart: apache2
 #
-# Here you can name directories, separated by spaces, that should be Include'd 
-# from httpd.conf. 
+# Here you can name directories, separated by spaces, that should be Include'd
+# from httpd.conf.
 #
 # All files contained in these directories will be recursively included by apache.
 # If a pattern like *.conf is appended, apache will use it.
@@ -39,7 +39,7 @@ APACHE_CONF_INCLUDE_DIRS=""
 # However, since the LoadModule statements might need an absolute path to the modules,
 # switching between MPMs can be quite a hassle. It's easier to just give the names here.]
 #
-# * list of all modules shipped with the base distribution: 
+# * list of all modules shipped with the base distribution:
 #   see /usr/lib64/apache2-$MPM
 #   see http://httpd.apache.org/docs/2.4/mod/ !
 #
@@ -51,21 +51,21 @@ APACHE_CONF_INCLUDE_DIRS=""
 # * In the APACHE_MODULES variable, you can use mod_xyz or just xyz syntax.
 #   You may also name an absolute path if you like.
 #
-# * NOTES ON SSL: 
-#   1. Before you can use mod_ssl, you need a server certificate. 
+# * NOTES ON SSL:
+#   1. Before you can use mod_ssl, you need a server certificate.
 #      A test certificate can be created by entering e. g.
 #
 #      $ gensslcert -n a.com -C a.com -e webmaster@a.com
 #
 #      See gensslcert -h for or gensslcert script itself for details.
-#   2. Also, you need to set the ServerName inside the <VirtualHost _default_:443> 
+#   2. Also, you need to set the ServerName inside the <VirtualHost _default_:443>
 #      block to the fully qualified domain name (see /etc/HOSTNAME).
 #   3. If your server certificate is protected by a passphrase you should increase the
 #      APACHE_START_TIMEOUT (see above)
 #   4. Consider to load also socache_shmcb module, see
 #      http://httpd.apache.org/docs/2.4/mod/mod_ssl.html#sslsessioncache
 #      for details.
-#   5. To finally enable ssl support, you need to add 'SSL' to APACHE_SERVER_FLAGS 
+#   5. To finally enable ssl support, you need to add 'SSL' to APACHE_SERVER_FLAGS
 #      below.
 #
 # * modules listed here will be ignored if they are not installed
@@ -79,7 +79,7 @@ APACHE_CONF_INCLUDE_DIRS=""
 # apache's default installation
 # APACHE_MODULES="authz_host actions alias asis auth autoindex cgi dir imap include log_config mime negotiation setenvif status userdir"
 # your settings
-APACHE_MODULES="actions alias auth_basic authn_file authz_host authz_groupfile authz_core authz_user autoindex cgi dir env expires include log_config mime negotiation setenvif ssl socache_shmcb userdir reqtimeout wsgi authn_core"
+APACHE_MODULES="actions alias auth_basic authn_file authz_host authz_groupfile authz_core authz_user autoindex cgi dir env expires include log_config mime negotiation setenvif ssl socache_shmcb userdir reqtimeout wsgi authn_core version rewrite"
 
 
 ## Type:	string
@@ -88,7 +88,7 @@ APACHE_MODULES="actions alias auth_basic authn_file authz_host authz_groupfile a
 #
 # Additional server flags:
 #
-# Put here any server flags ("Defines") that you want to hand over to 
+# Put here any server flags ("Defines") that you want to hand over to
 # httpd at start time, or other command line flags.
 #
 # Background: Any directives within an <IfDefine flag>...</IfDefine>
@@ -120,7 +120,7 @@ APACHE_SERVER_FLAGS=""
 # It is unusual to need to use this setting.
 #
 # Note about ulimits:
-#   if you want to set ulimits, e.g. to increase the max number of open file handle, 
+#   if you want to set ulimits, e.g. to increase the max number of open file handle,
 #   or to allow core files, you can do so by editing /etc/sysconfig/apache2 and
 #   simply write the ulimit commands into that file.
 #   Example:
@@ -138,7 +138,7 @@ APACHE_HTTPD_CONF=""
 # MPM (multi-processing module) to use.
 #
 # Needed to determine with which MPM apache will run, as well as
-# against which header files modules will be built. 
+# against which header files modules will be built.
 #
 # If not set, the system will simply pick one of the installed MPMs.
 #
@@ -152,14 +152,14 @@ APACHE_MPM=""
 ## ServiceReload: apache2
 #
 # email address of the server administrator (ServerAdmin directive)
-# This address is added to the server's responses if APACHE_SERVERSIGNATURE 
-# is set to "email". 
+# This address is added to the server's responses if APACHE_SERVERSIGNATURE
+# is set to "email".
 #
 # If empty ("") it defaults to webmaster@$FQHOSTNAME, where FQHOSTNAME is
-# taken from /etc/HOSTNAME. 
+# taken from /etc/HOSTNAME.
 #
 # Note that ServerAdmin directives inside VirtualHost statements are not
-# changed, even not the one in the stock SSL virtual host block. 
+# changed, even not the one in the stock SSL virtual host block.
 #
 APACHE_SERVERADMIN=""
 
@@ -175,10 +175,10 @@ APACHE_SERVERADMIN=""
 # redirections will not work.  See also the UseCanonicalName directive.
 #
 # If your host doesn't have a registered DNS name, enter its IP address here.
-# You will have to access it by its address anyway, and this will make 
+# You will have to access it by its address anyway, and this will make
 # redirections work in a sensible way.
 #
-APACHE_SERVERNAME="{{ hostname }}"
+APACHE_SERVERNAME="{{ server.host }}"
 
 ## Type:	integer
 ## Default:	2
@@ -194,8 +194,8 @@ APACHE_START_TIMEOUT="2"
 ## Default:	"on"
 ## ServiceReload: apache2
 #
-# Configures the footer on server-generated documents 
-# This correlates to the ServerSignature directive. 
+# Configures the footer on server-generated documents
+# This correlates to the ServerSignature directive.
 #
 APACHE_SERVERSIGNATURE="off"
 
@@ -218,13 +218,13 @@ APACHE_LOGLEVEL="warn"
 # logged therein and *not* in this file.
 #
 # Simply set it to empty, if you configure it yourself somewhere else.
-# 
+#
 # Examples:
 #
 # If you would like to have agent and referer logfiles:
 #
 # setting it to "/var/log/apache2/referer_log referer, /var/log/apache2/agent_log agent"
-#   corresponds to 
+#   corresponds to
 # CustomLog /var/log/apache2/referer_log referer
 # CustomLog /var/log/apache2/agent_log   agent
 #
@@ -232,7 +232,7 @@ APACHE_LOGLEVEL="warn"
 # (Combined Logfile Format):
 #
 # setting it to "/var/log/apache2/access_log combined"
-#   corresponds to 
+#   corresponds to
 # CustomLog /var/log/apache2/access_log combined
 #
 APACHE_ACCESS_LOG="/var/log/apache2/access_log combined"
@@ -241,7 +241,7 @@ APACHE_ACCESS_LOG="/var/log/apache2/access_log combined"
 ## Default:	"Off"
 ## ServiceReload: apache2
 #
-# UseCanonicalName: Determines how Apache constructs self-referencing 
+# UseCanonicalName: Determines how Apache constructs self-referencing
 # URLs and the SERVER_NAME and SERVER_PORT variables.
 # When set "Off", Apache will use the Hostname and Port supplied
 # by the client.  When set "On", Apache will use the value of the
@@ -263,7 +263,7 @@ APACHE_SERVERTOKENS="ProductOnly"
 ## Default:	"off"
 ## ServiceReload: apache2
 #
-# If mod_status is used, include extended information about the server, like 
+# If mod_status is used, include extended information about the server, like
 # CPU usage, in the status report. It is a server-wide setting, and it can cost
 # some performance!
 #

@@ -22,7 +22,7 @@ keystone_db_user:
     - user: {{ server.database.user }}
     - host: {{ server.database.host }}
     - require:
-      - mysql_database: keystone_database
+      - mysql_user: keystone_db_user
 
 keystone_db_user_percent:
   mysql_user.present:
@@ -37,7 +37,7 @@ keystone_db_user_percent:
     - user: {{ server.database.user }}
     - host: "%"
     - require:
-      - mysql_database: keystone_database
+      - mysql_user: keystone_db_user_percent
 
 # Installing packages
 keystone_pkgs:

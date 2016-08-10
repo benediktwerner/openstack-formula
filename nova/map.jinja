@@ -5,28 +5,11 @@
         'debug': false,
     },
 }, merge=salt['pillar.get']('nova:controller')) %}
-{#
+
 {% set compute = salt['grains.filter_by']({
     'Suse': {
-        'pkgs': ['openstack-nova-compute', 'python-novaclient', 'python-nova', 'sysfsutils', 'sg3_utils'],
-        'services': ['messagebus', 'openstack-nova-compute', 'libvirtd'],
-        'libvirt_config': 'libvirt.conf',
-        'libvirt_bin': '/etc/sysconfig/libvirtd',
-        'libvirt_service': 'libvirtd',
-        'bind': compute_bind_defaults,
-        'debug': false,
-        'identity': {
-            'region': 'RegionOne'
-        },
-        'network': {
-            'region': 'RegionOne'
-        },
-        'heal_instance_info_cache_interval': '60',
+        'pkgs_removed': ['kernel-default-base'],
+        'pkgs': ['python-openstackclient', 'openstack-nova-compute', 'genisoimage', 'qemu-kvm', 'libvirt', 'kernel-default'],
+        'services': ['openstack-nova-compute', 'libvirtd'],
     },
-}, merge=salt['grains.filter_by']({
-    'trusty': {
-        'libvirt_bin': '/etc/default/libvirt-bin',
-        'libvirt_service': 'libvirt-bin',
-    },
-}, grain='oscodename', merge=salt['pillar.get']('nova:compute'))) %}
-#}
+}, merge=salt['pillar.get']('nova:compute')) %}

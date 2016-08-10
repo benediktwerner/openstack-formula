@@ -122,6 +122,7 @@ keystone_syncdb:
 a2enmod_version:
   cmd.run:
     - name: a2enmod version
+    - unless: a2enmod -l | grep "version"
     - require:
       - pkg: keystone_pkgs
 
@@ -167,8 +168,8 @@ keystone_admin_user:
     - email: {{ server.admin_email }}
     - tenant: {{ server.admin_tenant }}
     - roles:
-      {{ server.admin_tenant }}:
-        - admin
+        {{ server.admin_tenant }}:
+          - admin
     - require:
       - keystone: keystone_admin_tenant
       - keystone: keystone_roles
@@ -197,9 +198,9 @@ keystone_{{ service_name }}_service:
 keystone_{{ service_name }}_endpoint:
   keystone.endpoint_present:
     - name: {{ service_name }}
-    - publicurl: '{{ service.bind.get('public_protocol', 'http') }}://{{ service.bind.get('public_address', server.host) }}:{{ service.bind.public_port }}{{ service.bind.get('public_path', 'v2.0') }}'
-    - internalurl: '{{ service.bind.get('internal_protocol', 'http') }}://{{ service.bind.get('internal_address', server.host) }}:{{ service.bind.internal_port }}{{ service.bind.get('internal_path', 'v2.0') }}'
-    - adminurl: '{{ service.bind.get('admin_protocol', 'http') }}://{{ service.bind.get('admin_address', server.host) }}:{{ service.bind.admin_port }}{{ service.bind.get('admin_path', 'v2.0') }}'
+    - publicurl: '{{ service.bind.get('public_protocol', 'http') }}://{{ service.bind.get('public_address', server.host) }}:{{ service.bind.public_port }}{{ service.bind.get('public_path', '') }}'
+    - internalurl: '{{ service.bind.get('internal_protocol', 'http') }}://{{ service.bind.get('internal_address', server.host) }}:{{ service.bind.internal_port }}{{ service.bind.get('internal_path', '') }}'
+    - adminurl: '{{ service.bind.get('admin_protocol', 'http') }}://{{ service.bind.get('admin_address', server.host) }}:{{ service.bind.admin_port }}{{ service.bind.get('admin_path', '') }}'
     - region: {{ service.get('region', 'RegionOne') }}
     - require:
       - keystone: keystone_{{ service_name }}_service
@@ -231,6 +232,7 @@ keystone_tenant_{{ tenant_name }}:
     - name: {{ tenant_name }}
     - require:
       - keystone: keystone_roles
+    {{ keystone_connection_args }}
 
 {% for user_name, user in tenant.get('user', {}).iteritems() %}
 
@@ -242,13 +244,14 @@ keystone_user_{{ user_name }}:
     - tenant: {{ tenant_name }}
     - roles:
         {{ tenant_name }}:
-          {%- if user.get('roles', False) %}
+          {% if user.get('roles', False) %}
           {{ user.roles }}
-          {%- else %}
+          {% else %}
           - user
-          {%- endif %}
+          {% endif %}
     - require:
       - keystone: keystone_tenant_{{ tenant_name }}
+    {{ keystone_connection_args }}
 
 {% endfor %}
 {% endfor %}

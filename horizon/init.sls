@@ -12,28 +12,28 @@ horizon_dashboard_conf:
     - source: salt://openstack/horizon/files/openstack-dashboard.conf
     - template: jinja
     - require:
-      - pkg: openstack-dashboard
+      - pkg: horizon_pkgs
 
 horizon_enable_mod_rewrite:
   cmd.run:
     - name: "a2enmod rewrite"
     - unless: a2enmod -l | grep "rewrite"
     - require:
-      - file: horizon_dashboard_conf
+      - pkg: horizon_pkgs
 
 horizon_enable_mod_ssl:
   cmd.run:
     - name: "a2enmod ssl"
     - unless: a2enmod -l | grep "ssl"
     - require:
-      - cmd: horizon_enable_mod_rewrite
+      - pkg: horizon_pkgs
 
 horizon_enable_mod_wsgi:
   cmd.run:
     - name: "a2enmod wsgi"
     - unless: a2enmod -l | grep "wsgi"
     - require:
-      - cmd: horizon_enable_mod_ssl
+      - pkg: horizon_pkgs
 
 horizon_local_settings_py:
   file.managed:
@@ -41,7 +41,7 @@ horizon_local_settings_py:
     - source: salt://openstack/horizon/files/local_settings.py
     - template: jinja
     - require:
-      - cmd: horizon_enable_mod_wsgi
+      - pkg: horizon_pkgs
 
 # Starting horizon services
 horizon_services:

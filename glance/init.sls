@@ -1,6 +1,6 @@
 {% from "openstack/glance/map.jinja" import server with context %}
 
-#Creating database and db users
+# Creating database and db users
 glance_database:
   mysql_database.present:
     - name: {{ server.database.name }}

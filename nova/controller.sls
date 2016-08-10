@@ -47,8 +47,11 @@ nova_pkgs:
       - pkg: nova_pkgs
 
 nova_services:
-  service.enabled:
+  service.running:
     - names: {{ controller.services }}
-    - enabled: True
+    - enable: True
+    - require:
+      - mysql_grants: nova_db_user
+      - mysql_grants: nova_db_user_percent
     - watch:
       - file: /etc/nova/nova.conf

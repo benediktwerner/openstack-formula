@@ -29,3 +29,7 @@ rabbitmq-server:
     - enable: True
     - require:
       - pkg: rabbitmq-server
+
+SuSEfirewall2:
+  service.dead:
+    - enable: False

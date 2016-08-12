@@ -1,0 +1,163 @@
+# Default type: text
+# Default title: name with ("_" -> " " and capitalized first letters)
+
+keystone:
+  type: group
+
+  server:
+    type: group
+
+    host:
+      default: localhost
+    service_token:
+      default: token # auto generate option
+    service_tenant:
+      default: service
+    admin_tenant:
+      default: admin
+    admin_name:
+      default: admin
+    admin_password:
+      type: password
+      default: password #no default for pwd?
+    admin_email:
+      type: email
+      default: root@localhost
+
+    demo:
+      type: group
+
+      url:
+        type: url
+        default: ""
+      date:
+        type: date
+        default: ""
+      time:
+        type: time
+        default: ""
+      datetime:
+        type: datetime
+        default: ""
+      select:
+        type: select
+        values:
+          - option1
+          - another_option
+          - and some more stuff
+        default: another_option
+      boolean:
+        type: boolean
+        default: true
+
+    database:
+      type: group
+
+      name:
+        default: keystone
+      host:
+        default: localhost
+      user:
+        default: keystone
+      password:
+        type: password
+        default: password #no default for pwd?
+
+    cache:
+      type: group
+
+      host:
+        default: localhost
+      port:
+        type: number
+        default: 11211
+
+    service:
+      type: edit_group
+      element:
+        type:
+          default: ""
+        description:
+          default: "" # auto insert 'OpenStack ' + type + ' service' ??
+        region:
+          default: RegionOne
+        bind:
+          type: group
+
+          public_protocol:
+            default: http
+          public_port:
+            type: number
+            default: ""
+          public_path:
+            default: ""
+          internal_protocol:
+            default: http
+          internal_port:
+            type: number
+            default: ""
+          internal_path:
+            default: ""
+          admin_protocol:
+            default: http
+          admin_port:
+            type: number
+            default: ""
+          admin_path:
+            default: ""
+        user: # should be optional
+          type: group
+
+          name:
+            default: "" # default to service name
+          password:
+            type: password
+            default: password
+
+      default:
+        keystone:
+          type: identity
+          description: OpenStack Identity
+          bind:
+            public_port: 5000
+            public_path: /v2.0
+            internal_port: 5000
+            internal_path: /v2.0
+            admin_port: 35357
+            admin_path: /v2.0
+        glance:
+          type: image
+          description: OpenStack Image service
+          bind:
+            public_port: 9292
+            internal_port: 9292
+            admin_port: 9292
+          user:
+            name: glance
+        nova:
+          type: compute
+          description: OpenStack Compute
+          bind:
+            public_port: 8774
+            public_path: /v2/%(tenant_id)s
+            internal_port: 8774
+            internal_path: /v2/%(tenant_id)s
+            admin_port: 8774
+            admin_path: /v2/%(tenant_id)s
+          user:
+            name: nova
+
+    tenant:
+      type: edit_group
+      element:
+        user:
+          type: edit_group
+          element:
+            password:
+              type: password
+              default: password
+            email:
+              type: email
+              default: ""
+            roles:
+              type: text # should be some kind of checklist or mutlilist

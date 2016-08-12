@@ -7,6 +7,8 @@ nova_remove_base_kernel:
 nova_pkgs:
   pkg.installed:
     - names: {{ compute.pkgs }}
+    - require:
+      - pkg: nova_remove_base_kernel
 
 /etc/nova/nova.conf:
   file.managed:
@@ -18,8 +20,15 @@ nova_pkgs:
 nbd:
   kmod.present:
     - persist: True
+    - require:
+      - pkg: nova_pkgs
 
 nova_services:
   service.running:
     - names: {{ compute.services }}
     - enable: True
+    - require:
+      - kmod: nbd
+    - watch:
+      - file: /etc/nova/nova.conf
+

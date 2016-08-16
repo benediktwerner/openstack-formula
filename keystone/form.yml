@@ -1,6 +1,3 @@
-# Default $type: text
-# Default title: name with ("_" -> " " and capitalized first letters)
-
 keystone:
   $type: group
 
@@ -10,7 +7,7 @@ keystone:
     host:
       $default: localhost
     service_token:
-      $default: token # auto generate option
+      $default: token
     service_tenant:
       $default: service
     admin_tenant:
@@ -19,36 +16,10 @@ keystone:
       $default: admin
     admin_password:
       $type: password
-      $default: password #no default for pwd?
+      $default: password
     admin_email:
       $type: email
       $default: root@localhost
-
-    demo:
-      $type: group
-
-      url:
-        $type: url
-        $default: ""
-      date:
-        $type: date
-        $default: ""
-      time:
-        $type: time
-        $default: ""
-      datetime:
-        $type: datetime
-        $default: ""
-      select:
-        $type: select
-        values:
-          - option1
-          - another_option
-          - and some more stuff
-        $default: another_option
-      boolean:
-        $type: boolean
-        $default: true
 
     database:
       $type: group
@@ -61,7 +32,7 @@ keystone:
         $default: keystone
       password:
         $type: password
-        $default: password #no default for pwd?
+        $default: password
 
     cache:
       $type: group
@@ -179,4 +150,4 @@ keystone:
               $type: email
               $default: ""
             roles:
-              $type: text # should be some kind of checklist or mutlilist
+              $type: text

@@ -1,0 +1,67 @@
+neutron:
+  $type: group
+
+  server:
+    $type: group
+
+    host:
+      $default: localhost
+    physical_public_interface_name:
+      $default: eth0
+    metadata_secret:
+      $type: password
+      $default: secret
+
+    database:
+      $type: group
+
+      host:
+        $default: localhost
+      name:
+        $default: neutron
+      user:
+        $default: neutron
+      password:
+        $type: password
+        $default: password
+
+    identity:
+      $type: group
+
+      host:
+        $default: localhost
+      region:
+        $default: RegionOne
+      tenant:
+        $default: service
+      user:
+        $default: neutron
+      password:
+        $type: password
+        $default: password
+
+    message_queue:
+      $type: group
+
+      host:
+        $default: localhost
+      user:
+        $default: openstack
+      password:
+        $type: password
+        $default: password
+
+    compute:
+      $type: group
+
+      host:
+        $default: 127.0.0.1
+      region:
+        $default: RegionOne
+      tenant:
+        $default: service
+      user:
+        $default: nova
+      password:
+        $type: password
+        $default: password

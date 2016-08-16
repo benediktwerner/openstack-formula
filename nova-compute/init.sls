@@ -21,7 +21,7 @@ nova_pkgs:
 
 /etc/nova/nova.conf:
   file.managed:
-    - source: salt://openstack/nova/files/compute.nova.conf
+    - source: salt://openstack/nova/files/nova.conf
     - template: jinja
     - require:
       - pkg: nova_pkgs

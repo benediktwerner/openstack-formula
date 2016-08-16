@@ -1,0 +1,33 @@
+neutron:
+  $type: group
+
+  compute:
+    $type: group
+
+    physical_public_interface_name:
+      $default: eth0
+
+    identity:
+      $type: group
+
+      host:
+        $default: controller.de.mo
+      tenant:
+        $default: service
+      user:
+        $default: neutron
+      password:
+        $type: password
+        $default: password
+
+    message_queue:
+      $type: group
+
+      host:
+        $default: controller.de.mo
+      user:
+        $default: openstack
+      password:
+        $type: password
+        $default: password
+

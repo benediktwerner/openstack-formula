@@ -1,0 +1,32 @@
+glance:
+  $type: group
+
+  server:
+    $type: group
+
+    host:
+      $default: localhost
+    database:
+      $type: group
+
+      host:
+        $default: localhost
+      name:
+        $default: glance
+      user:
+        $default: glance
+      password:
+        $type: password
+        $default: password
+    identity:
+      $type: group
+
+      host:
+        $default: localhost
+      tenant:
+        $default: service
+      user:
+        $default: glance
+      password:
+        $type: password
+        $default: password

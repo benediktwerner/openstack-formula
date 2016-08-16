@@ -1,0 +1,7 @@
+{% set compute = salt['grains.filter_by']({
+    'Suse': {
+        'pkgs_removed': ['kernel-default-base'],
+        'pkgs': ['kernel-default', 'python-openstackclient', 'openstack-nova-compute', 'genisoimage', 'qemu-kvm', 'libvirt'],
+        'services': ['openstack-nova-compute', 'libvirtd'],
+    },
+}, merge=salt['pillar.get']('nova:compute')) %}

@@ -1,0 +1,8 @@
+horizon:
+  $type: group
+
+  server:
+    $type: group
+
+    host:
+      $default: controller.de.mo

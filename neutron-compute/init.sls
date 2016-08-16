@@ -8,14 +8,14 @@ neutron_pkgs:
 # Managing config files
 /etc/neutron/neutron.conf:
   file.managed:
-    - source: salt://openstack/neutron/files/compute.neutron.conf
+    - source: salt://openstack/neutron/files/neutron.conf
     - template: jinja
     - require:
       - pkg: neutron_pkgs
 
 /etc/neutron/plugins/ml2/linuxbridge_agent.ini:
   file.managed:
-    - source: salt://openstack/neutron/files/compute.linuxbridge_agent.ini
+    - source: salt://openstack/neutron/files/linuxbridge_agent.ini
     - template: jinja
     - require:
       - pkg: neutron_pkgs

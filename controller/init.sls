@@ -1,3 +1,8 @@
+# BAD HACK, TODO: implement chrony or another ntp
+hacky_ntp:
+  cmd.run:
+    - name: "hwclock --hctosys"
+
 python-openstackclient:
   pkg.installed
 

@@ -57,11 +57,6 @@ horizon_services:
       - file: horizon_dashboard_conf
       - file: horizon_local_settings_py
 
-# Disabling firewall (TODO: instead open correct ports!)
-SuSEfirewall2:
-  service.dead:
-    - enable: False
-
 # Installing Dashboard Branding
 openstack-dashboard-theme-SUSE:
   pkg.installed

@@ -1,5 +1,14 @@
 {% from "openstack/nova/map.jinja" import compute with context %}
 
+# BAD HACK, TODO: implement chrony or another ntp
+hacky_ntp:
+  cmd.run:
+    - name: "hwclock --hctosys"
+
+SuSEfirewall2:
+  service.dead:
+    - enable: False
+
 nova_remove_base_kernel:
   pkg.removed:
     - names: {{ compute.pkgs_removed }}

@@ -1,163 +1,182 @@
-# Default type: text
+# Default $type: text
 # Default title: name with ("_" -> " " and capitalized first letters)
 
 keystone:
-  type: group
+  $type: group
 
   server:
-    type: group
+    $type: group
 
     host:
-      default: localhost
+      $default: localhost
     service_token:
-      default: token # auto generate option
+      $default: token # auto generate option
     service_tenant:
-      default: service
+      $default: service
     admin_tenant:
-      default: admin
+      $default: admin
     admin_name:
-      default: admin
+      $default: admin
     admin_password:
-      type: password
-      default: password #no default for pwd?
+      $type: password
+      $default: password #no default for pwd?
     admin_email:
-      type: email
-      default: root@localhost
+      $type: email
+      $default: root@localhost
 
     demo:
-      type: group
+      $type: group
 
       url:
-        type: url
-        default: ""
+        $type: url
+        $default: ""
       date:
-        type: date
-        default: ""
+        $type: date
+        $default: ""
       time:
-        type: time
-        default: ""
+        $type: time
+        $default: ""
       datetime:
-        type: datetime
-        default: ""
+        $type: datetime
+        $default: ""
       select:
-        type: select
+        $type: select
         values:
           - option1
           - another_option
           - and some more stuff
-        default: another_option
+        $default: another_option
       boolean:
-        type: boolean
-        default: true
+        $type: boolean
+        $default: true
 
     database:
-      type: group
+      $type: group
 
       name:
-        default: keystone
+        $default: keystone
       host:
-        default: localhost
+        $default: localhost
       user:
-        default: keystone
+        $default: keystone
       password:
-        type: password
-        default: password #no default for pwd?
+        $type: password
+        $default: password #no default for pwd?
 
     cache:
-      type: group
+      $type: group
 
       host:
-        default: localhost
+        $default: localhost
       port:
-        type: number
-        default: 11211
+        $type: number
+        $default: 11211
 
     service:
-      type: edit_group
-      element:
+      $type: edit_group
+      $name: Services
+      $element:
         type:
-          default: ""
+          $default: ""
         description:
-          default: "" # auto insert 'OpenStack ' + type + ' service' ??
+          $default: "" # auto insert 'OpenStack ' + type + ' service' ??
         region:
-          default: RegionOne
+          $default: RegionOne
         bind:
-          type: group
+          $type: group
 
           public_protocol:
-            default: http
+            $default: http
           public_port:
-            type: number
-            default: ""
+            $type: number
+            $default: ""
           public_path:
-            default: ""
+            $default: ""
           internal_protocol:
-            default: http
+            $default: http
           internal_port:
-            type: number
-            default: ""
+            $type: number
+            $default: ""
           internal_path:
-            default: ""
+            $default: ""
           admin_protocol:
-            default: http
+            $default: http
           admin_port:
-            type: number
-            default: ""
+            $type: number
+            $default: ""
           admin_path:
-            default: ""
+            $default: ""
         user: # should be optional
-          type: group
+          $type: group
 
           name:
-            default: "" # default to service name
+            $default: "" # default to service name
           password:
-            type: password
-            default: password
+            $type: password
+            $default: password
 
-      default:
+      $default:
         keystone:
           type: identity
           description: OpenStack Identity
           bind:
+            public_protocol: http
             public_port: 5000
             public_path: /v2.0
+            internal_protocol: http
             internal_port: 5000
             internal_path: /v2.0
+            admin_protocol: http
             admin_port: 35357
             admin_path: /v2.0
+          user:
+            name: glance
+            password: password
         glance:
           type: image
           description: OpenStack Image service
           bind:
+            public_protocol: http
             public_port: 9292
+            public_path: ""
+            internal_protocol: http
             internal_port: 9292
+            internal_path: ""
+            admin_protocol: http
             admin_port: 9292
+            admin_path: ""
           user:
             name: glance
+            password: password
         nova:
           type: compute
           description: OpenStack Compute
           bind:
+            public_protocol: http
             public_port: 8774
             public_path: /v2/%(tenant_id)s
+            internal_protocol: http
             internal_port: 8774
             internal_path: /v2/%(tenant_id)s
+            admin_protocol: http
             admin_port: 8774
             admin_path: /v2/%(tenant_id)s
           user:
             name: nova
+            password: password
 
     tenant:
-      type: edit_group
-      element:
+      $type: edit_group
+      $name: Projects
+      $element:
         user:
-          type: edit_group
-          element:
+          $type: edit_group
+          $element:
             password:
-              type: password
-              default: password
+              $type: password
+              $default: password
             email:
-              type: email
-              default: ""
+              $type: email
+              $default: ""
             roles:
-              type: text # should be some kind of checklist or mutlilist
+              $type: text # should be some kind of checklist or mutlilist

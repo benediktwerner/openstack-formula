@@ -1,0 +1,14 @@
+
+{% set compute = salt['grains.filter_by']({
+    'Suse': {
+        'pkgs': ['openstack-neutron-linuxbridge-agent', 'ipset'],
+        'services': ['openstack-neutron-linuxbridge-agent']
+    },
+}, merge=salt['pillar.get']('neutron:compute')) %}
+
+{% set server = salt['grains.filter_by']({
+    'Suse': {
+        'pkgs': ['openstack-neutron', 'openstack-neutron-server', 'openstack-neutron-linuxbridge-agent', 'openstack-neutron-dhcp-agent', 'openstack-neutron-metadata-agent', 'ipset'],
+        'services': ['openstack-neutron', 'openstack-neutron-linuxbridge-agent', 'openstack-neutron-dhcp-agent', 'openstack-neutron-metadata-agent'],
+    },
+}, merge=salt['pillar.get']('neutron:server')) %}

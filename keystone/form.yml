@@ -44,7 +44,7 @@ keystone:
         $default: 11211
 
     service:
-      $type: edit_group
+      $type: edit-group
       $name: Services
       $element:
         type:
@@ -137,11 +137,11 @@ keystone:
             password: password
 
     tenant:
-      $type: edit_group
+      $type: edit-group
       $name: Projects
       $element:
         user:
-          $type: edit_group
+          $type: edit-group
           $element:
             password:
               $type: password

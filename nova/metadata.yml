@@ -1,0 +1,3 @@
+after:
+  - keystone
+  - glance

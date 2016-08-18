@@ -1,7 +1,13 @@
+{% from "openstack/controller/map.jinja" import server with context %}
+
 # BAD HACK, TODO: implement chrony or another ntp
 hacky_ntp:
   cmd.run:
     - name: "hwclock --hctosys"
+
+SuSEfirewall2:
+  service.dead:
+    - enable: False
 
 python-openstackclient:
   pkg.installed
@@ -35,6 +41,23 @@ rabbitmq-server:
     - require:
       - pkg: rabbitmq-server
 
-SuSEfirewall2:
-  service.dead:
-    - enable: False
+# HACK: RabbitMQ needs some more time, else openstack_user_present will fail
+wait_for_rmq:
+  module.wait:
+    - name: test.sleep
+    - length: 5
+    - watch:
+      - pkg: rabbitmq-server
+
+openstack_user_present:
+  rabbitmq_user.present:
+    - name: {{ server.message_queue.user }}
+    - password: {{ server.message_queue.password }}
+    - force: True
+    - perms:
+      - '/':
+        - '.*'
+        - '.*'
+        - '.*'
+    - require:
+      - module: wait_for_rmq

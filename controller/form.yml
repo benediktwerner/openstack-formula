@@ -1,0 +1,14 @@
+controller:
+  $type: group
+
+  server:
+    $type: hidden-group
+
+    message_queue:
+      $type: group
+
+      user:
+        $default: openstack
+      password:
+        $type: password
+        $default: password

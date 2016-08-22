@@ -1,11 +1,9 @@
 nova:
+  $name: Nova Controller
   $type: group
 
   controller:
-    $type: group
-
-    host:
-      $default: controller.de.mo
+    $type: hidden-group
 
     bind:
       $type: group

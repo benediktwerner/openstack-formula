@@ -2,7 +2,7 @@ keystone:
   $type: group
 
   server:
-    $type: group
+    $type: hidden-group
 
     host:
       $default: localhost
@@ -43,98 +43,192 @@ keystone:
         $type: number
         $default: 11211
 
+# Not working, cause edit_group is not finished, the code below is currently replacing it
+    #service:
+      #$type: edit-group
+      #$name: Services
+      #$element:
+        #type:
+          #$default: ""
+        #description:
+          #$default: "" # auto insert 'OpenStack ' + type + ' service' ??
+        #region:
+          #$default: RegionOne
+        #bind:
+          #$type: group
+
+          #public_protocol:
+            #$default: http
+          #public_port:
+            #$type: number
+            #$default: ""
+          #public_path:
+            #$default: ""
+          #internal_protocol:
+            #$default: http
+          #internal_port:
+            #$type: number
+            #$default: ""
+          #internal_path:
+            #$default: ""
+          #admin_protocol:
+            #$default: http
+          #admin_port:
+            #$type: number
+            #$default: ""
+          #admin_path:
+            #$default: ""
+        #user: # should be optional
+          #$type: group
+
+          #name:
+            #$default: "" # default to service name
+          #password:
+            #$type: password
+            #$default: password
+
+      #$default:
+        #keystone:
+          #type: identity
+          #description: OpenStack Identity
+          #bind:
+            #public_protocol: http
+            #public_port: 5000
+            #public_path: /v2.0
+            #internal_protocol: http
+            #internal_port: 5000
+            #internal_path: /v2.0
+            #admin_protocol: http
+            #admin_port: 35357
+            #admin_path: /v2.0
+        #glance:
+          #type: image
+          #description: OpenStack Image service
+          #bind:
+            #public_protocol: http
+            #public_port: 9292
+            #public_path: ""
+            #internal_protocol: http
+            #internal_port: 9292
+            #internal_path: ""
+            #admin_protocol: http
+            #admin_port: 9292
+            #admin_path: ""
+          #user:
+            #name: glance
+            #password: password
+        #nova:
+          #type: compute
+          #description: OpenStack Compute
+          #bind:
+            #public_protocol: http
+            #public_port: 8774
+            #public_path: /v2/%(tenant_id)s
+            #internal_protocol: http
+            #internal_port: 8774
+            #internal_path: /v2/%(tenant_id)s
+            #admin_protocol: http
+            #admin_port: 8774
+            #admin_path: /v2/%(tenant_id)s
+          #user:
+            #name: nova
+            #password: password
+
+# TEMPORARY CODE START
     service:
-      $type: edit-group
+      $type: group
       $name: Services
-      $element:
+
+      keystone:
+        $type: group
+
         type:
-          $default: ""
+          $default: identity
         description:
-          $default: "" # auto insert 'OpenStack ' + type + ' service' ??
-        region:
-          $default: RegionOne
+          $default: OpenStack Identity
         bind:
           $type: group
 
-          public_protocol:
-            $default: http
           public_port:
             $type: number
-            $default: ""
+            $default: 5000
           public_path:
-            $default: ""
-          internal_protocol:
-            $default: http
+            $default: /v2.0
           internal_port:
             $type: number
-            $default: ""
+            $default: 5000
           internal_path:
-            $default: ""
-          admin_protocol:
-            $default: http
+            $default: /v2.0
           admin_port:
             $type: number
-            $default: ""
+            $default: 35357
           admin_path:
-            $default: ""
-        user: # should be optional
+            $default: /v2.0
+      glance:
+        $type: group
+
+        type:
+          $default: image
+        description:
+          $default: OpenStack Image service
+        bind:
           $type: group
 
+          public_port:
+            $type: number
+            $default: 9292
+          public_path:
+            $default: ""
+          internal_port:
+            $type: number
+            $default: 9292
+          internal_path:
+            $default: ""
+          admin_port:
+            $type: number
+            $default: 9292
+          admin_path:
+            $default: ""
+        user:
+          $type: group
           name:
-            $default: "" # default to service name
+            $default: glance
           password:
             $type: password
             $default: password
+      nova:
+        $type: group
 
-      $default:
-        keystone:
-          type: identity
-          description: OpenStack Identity
-          bind:
-            public_protocol: http
-            public_port: 5000
-            public_path: /v2.0
-            internal_protocol: http
-            internal_port: 5000
-            internal_path: /v2.0
-            admin_protocol: http
-            admin_port: 35357
-            admin_path: /v2.0
-          user:
-            name: glance
-            password: password
-        glance:
-          type: image
-          description: OpenStack Image service
-          bind:
-            public_protocol: http
-            public_port: 9292
-            public_path: ""
-            internal_protocol: http
-            internal_port: 9292
-            internal_path: ""
-            admin_protocol: http
-            admin_port: 9292
-            admin_path: ""
-          user:
-            name: glance
-            password: password
-        nova:
-          type: compute
-          description: OpenStack Compute
-          bind:
-            public_protocol: http
-            public_port: 8774
-            public_path: /v2/%(tenant_id)s
-            internal_protocol: http
-            internal_port: 8774
-            internal_path: /v2/%(tenant_id)s
-            admin_protocol: http
-            admin_port: 8774
-            admin_path: /v2/%(tenant_id)s
-          user:
-            name: nova
-            password: password
+        type:
+          $default: compute
+        description:
+          $default: OpenStack Compute
+        bind:
+          $type: group
+
+          public_port:
+            $type: number
+            $default: 8774
+          public_path:
+            $default: /v2/%(tenant_id)s
+          internal_port:
+            $type: number
+            $default: 8774
+          internal_path:
+            $default: /v2/%(tenant_id)s
+          admin_port:
+            $type: number
+            $default: 8774
+          admin_path:
+            $default: /v2/%(tenant_id)s
+        user:
+          $type: group
+          name:
+            $default: nova
+          password:
+            $type: password
+            $default: password
+# TEMPORARY CODE END
 
     tenant:
       $type: edit-group

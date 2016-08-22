@@ -1,4 +1,4 @@
-{% from "openstack/neutron/map.jinja" import compute with context %}
+{% from "neutron-compute/map.jinja" import compute with context %}
 
 # Installing packages
 neutron_pkgs:
@@ -8,14 +8,14 @@ neutron_pkgs:
 # Managing config files
 /etc/neutron/neutron.conf:
   file.managed:
-    - source: salt://openstack/neutron/files/neutron.conf
+    - source: salt://neutron-compute/files/neutron.conf
     - template: jinja
     - require:
       - pkg: neutron_pkgs
 
 /etc/neutron/plugins/ml2/linuxbridge_agent.ini:
   file.managed:
-    - source: salt://openstack/neutron/files/linuxbridge_agent.ini
+    - source: salt://neutron-compute/files/linuxbridge_agent.ini
     - template: jinja
     - require:
       - pkg: neutron_pkgs
@@ -27,3 +27,9 @@ neutron_services:
     - watch:
       - file: /etc/neutron/neutron.conf
       - file: /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+
+neutron_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed neutron compute on {{ grains.id }}

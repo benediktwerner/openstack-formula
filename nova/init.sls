@@ -1,4 +1,4 @@
-{% from "openstack/nova/map.jinja" import controller with context %}
+{% from "nova/map.jinja" import controller with context %}
 
 # Creating database and db users
 nova_database:
@@ -41,7 +41,7 @@ nova_pkgs:
 
 /etc/nova/nova.conf:
   file.managed:
-    - source: salt://openstack/nova/files/nova.conf
+    - source: salt://nova/files/nova.conf
     - template: jinja
     - require:
       - pkg: nova_pkgs
@@ -55,3 +55,22 @@ nova_services:
       - mysql_grants: nova_db_user_percent
     - watch:
       - file: /etc/nova/nova.conf
+
+nova_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed nova
+
+nova_create_ssh_key:
+  cmd.run:
+    - name: ssh-keygen -q -N "" -f ~/.ssh/id_rsa
+    - creates: ~/.ssh/id_rsa
+    - requires:
+      - service: nova_services
+
+nova_add_ssh_key:
+  cmd.run:
+    - name: source /root/admin-openrc.sh && nova keypair-add --pub-key ~/.ssh/id_rsa.pub mykey
+    - watch: nova_create_ssh_key
+    - unless: source /root/admin-openrc.sh && openstack keypair list | grep mykey

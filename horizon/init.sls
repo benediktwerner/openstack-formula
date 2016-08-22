@@ -1,4 +1,4 @@
-{% from "openstack/horizon/map.jinja" import server with context %}
+{% from "horizon/map.jinja" import server with context %}
 
 # Installing horizon packages
 horizon_pkgs:
@@ -9,7 +9,7 @@ horizon_pkgs:
 horizon_dashboard_conf:
   file.managed:
     - name: /etc/apache2/conf.d/openstack-dashboard.conf
-    - source: salt://openstack/horizon/files/openstack-dashboard.conf
+    - source: salt://horizon/files/openstack-dashboard.conf
     - template: jinja
     - require:
       - pkg: horizon_pkgs
@@ -38,7 +38,7 @@ horizon_enable_mod_wsgi:
 horizon_local_settings_py:
   file.managed:
     - name: /srv/www/openstack-dashboard/openstack_dashboard/local/local_settings.py
-    - source: salt://openstack/horizon/files/local_settings.py
+    - source: salt://horizon/files/local_settings.py
     - template: jinja
     - require:
       - pkg: horizon_pkgs
@@ -46,9 +46,7 @@ horizon_local_settings_py:
 # Starting horizon services
 horizon_services:
   service.running:
-    - names:
-      - apache2
-      - memcached
+    - names: {{ server.services }}
     - enable: True
     - watch:
       - cmd: horizon_enable_mod_rewrite
@@ -60,4 +58,10 @@ horizon_services:
 # Installing Dashboard Branding
 openstack-dashboard-theme-SUSE:
   pkg.installed
+
+horizon_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed horizon
 

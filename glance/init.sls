@@ -1,4 +1,4 @@
-{% from "openstack/glance/map.jinja" import server with context %}
+{% from "glance/map.jinja" import server with context %}
 
 # Creating database and db users
 glance_database:
@@ -43,14 +43,14 @@ glance_packages:
 # Managing config files
 /etc/glance/glance-api.conf:
   file.managed:
-    - source: salt://openstack/glance/files/glance-api.conf
+    - source: salt://glance/files/glance-api.conf
     - template: jinja
     - require:
       - pkg: glance_packages
 
 /etc/glance/glance-registry.conf:
   file.managed:
-    - source: salt://openstack/glance/files/glance-registry.conf
+    - source: salt://glance/files/glance-registry.conf
     - template: jinja
     - require:
       - pkg: glance_packages
@@ -58,9 +58,7 @@ glance_packages:
 # Starting glance services
 glance_service:
   service.running:
-    - names:
-      - openstack-glance-api
-      - openstack-glance-registry
+    - names: {{ server.services }}
     - enable: True
     - require:
       - mysql_grants: glance_db_user
@@ -68,3 +66,20 @@ glance_service:
     - watch:
       - file: /etc/glance/glance-api.conf
       - file: /etc/glance/glance-registry.conf
+
+glance_download_image:
+  cmd.run:
+    - name: curl -L {{ server.image.url }} -o /tmp/{{server.image.name }}
+    - unless: source /root/admin-openrc.sh && openstack image list | grep {{ server.image.name }}
+    - creates: /tmp/{{ server.image.name }}
+
+glance_upload_image:
+  cmd.run:
+    - name: source /root/admin-openrc.sh && glance image-create --name {{ server.image.name }} --file /tmp/{{server.image.name}} --disk-format {{server.image.disk_format}} --container-format {{server.image.container_format}} --visibility {{server.image.visibility}}
+    - unless: source /root/admin-openrc.sh && openstack image list | grep {{ server.image.name }}
+
+glance_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed glance

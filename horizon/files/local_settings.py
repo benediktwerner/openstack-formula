@@ -1,4 +1,4 @@
-{% from "openstack/horizon/map.jinja" import server with context %}
+{% from "horizon/map.jinja" import server with context %}
 
 import os
 

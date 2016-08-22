@@ -1,5 +1,6 @@
 {% set server = salt['grains.filter_by']({
     'Suse': {
         'pkgs': ['openstack-dashboard'],
+        'services': ['apache2', 'memcached']
     },
 }, merge=salt['pillar.get']('horizon:server')) %}

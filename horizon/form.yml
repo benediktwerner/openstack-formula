@@ -2,7 +2,7 @@ horizon:
   $type: group
 
   server:
-    $type: group
+    $type: hidden-group
 
     host:
-      $default: controller.de.mo
+      $default: localhost

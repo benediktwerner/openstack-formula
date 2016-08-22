@@ -1,8 +1,8 @@
 nova:
-  $type: group
+  $type: hidden-group
 
   compute:
-    $type: group
+    $type: hidden-group
 
     bind:
       $type: group

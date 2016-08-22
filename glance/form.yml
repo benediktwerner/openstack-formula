@@ -2,7 +2,7 @@ glance:
   $type: group
 
   server:
-    $type: group
+    $type: hidden-group
 
     host:
       $default: localhost
@@ -30,3 +30,23 @@ glance:
       password:
         $type: password
         $default: password
+
+    image:
+      $type: group
+
+      name:
+        $default: cirros
+      url:
+        $default: http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+      visibility:
+        $type: select
+        $values: ["public", "privat"]
+        $default: public
+      disk_format:
+        $type: select
+        $values: ["raw", "vhd", "vhdx", "vmdk", "vdi", "iso", "qcow2", "aki", "ari", "ami"]
+        $default: qcow2
+      container_format:
+        $type: select
+        $values: ["bare", "ovf", "aki", "ari", "ami", "ova", "docker"]
+        $default: bare

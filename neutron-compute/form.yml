@@ -1,8 +1,8 @@
 neutron:
-  $type: group
+  $type: hidden-group
 
   compute:
-    $type: group
+    $type: hidden-group
 
     physical_public_interface_name:
       $default: eth0

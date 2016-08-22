@@ -1,5 +1,11 @@
-{% from "openstack/controller/map.jinja" import server with context %}
+{% from "controller/map.jinja" import server with context %}
 
+controller_start_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Started installing controller prerequisits
+        
 # BAD HACK, TODO: implement chrony or another ntp
 hacky_ntp:
   cmd.run:
@@ -21,7 +27,7 @@ mariadb:
 
 /etc/my.cnf.d/mariadb_openstack.cnf:
   file.managed:
-    - source: salt://openstack/controller/files/mariadb_openstack.cnf
+    - source: salt://controller/files/mariadb_openstack.cnf
 
 mysql:
   service.running:
@@ -61,3 +67,9 @@ openstack_user_present:
         - '.*'
     - require:
       - module: wait_for_rmq
+
+controller_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed controller prerequisits

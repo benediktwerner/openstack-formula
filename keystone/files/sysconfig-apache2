@@ -1,4 +1,4 @@
-{% from "openstack/keystone/map.jinja" import server with context %}
+{% from "keystone/map.jinja" import server with context %}
 
 ## Path:	Network/WWW/Apache2
 ## Description:	Configuration for Apache 2

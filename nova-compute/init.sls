@@ -1,4 +1,10 @@
-{% from "openstack/nova/map.jinja" import compute with context %}
+{% from "nova-compute/map.jinja" import compute with context %}
+
+nova_start_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Starting installation on {{ grains.id }}
 
 # BAD HACK, TODO: implement chrony or another ntp
 hacky_ntp:
@@ -21,7 +27,7 @@ nova_pkgs:
 
 /etc/nova/nova.conf:
   file.managed:
-    - source: salt://openstack/nova/files/nova.conf
+    - source: salt://nova-compute/files/nova.conf
     - template: jinja
     - require:
       - pkg: nova_pkgs
@@ -41,3 +47,8 @@ nova_services:
     - watch:
       - file: /etc/nova/nova.conf
 
+nova_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed nova compute on {{ grains.id }}

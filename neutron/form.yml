@@ -2,7 +2,7 @@ neutron:
   $type: group
 
   server:
-    $type: group
+    $type: hidden-group
 
     host:
       $default: localhost

@@ -30,7 +30,9 @@ def __virtual__():
     return True
 
 
-def ext_pillar(minion_id, pillar, path):
+def ext_pillar(minion_id, pillar, path,
+    formula_layout_path="/usr/share/susemanager/salt/formulas",
+    formula_data_path="/srv/susemanager/formulas_data"):
     '''
     Find SUMA-related pillars for the registered minions and return the data.
     '''
@@ -45,30 +47,32 @@ def ext_pillar(minion_id, pillar, path):
         log.error('Error accessing "{pillar_file}": {message}'.format(pillar_file=data_filename, message=str(error)))
 
     try:
-        ret.update(formula_pillars(minion_id, ret.get("group_ids", [])))
+        ret.update(formula_pillars(minion_id, ret.get("group_ids", []), formula_layout_path, formula_data_path))
     except Exception as error:
         log.error('Error accessing formula pillar data: {message}'.format(message=str(error)))
 
     return ret
 
-def formula_pillars(minion_id, group_ids):
+def formula_pillars(minion_id, group_ids, formula_layout_path, formula_data_path):
     ret = dict()
     formulas = dict()
-    with open("/srv/susemanager/formulas_data/group_formulas.json") as f:
+    with open(os.path.join(formula_data_path, "group_formulas.json")) as f:
         group_formulas = json.load(f)
         for group in group_ids:
             formulas[group] = group_formulas.get(unicode(group), [])
 
+	formulas_list = []
     for key in formulas:
         for formula in formulas[key]:
-            ret.update(load_formula_pillar(minion_id, key, formula))
-
+        	formulas_list.append(formula)
+            ret.update(load_formula_pillar(minion_id, key, formula, formula_layout_path, formula_data_path))
+	ret["formulas"] = formulas_list
     return ret
 
-def load_formula_pillar(minion_id, group_id, formula_name):
-    layout_filename = "/usr/share/susemanager/salt/formulas/" + formula_name + "/form.yml"
-    group_filename = "/srv/susemanager/formulas_data/group_pillar/" + str(group_id) + "_" + formula_name + ".json"
-    system_filename = "/srv/susemanager/formulas_data/pillar/" + str(minion_id) + "_" + formula_name + ".json"
+def load_formula_pillar(minion_id, group_id, formula_name, formula_layout_path, formula_data_path):
+    layout_filename = os.path.join(formula_layout_path, formula_name, "form.yml")
+    group_filename = os.path.join(formula_data_path, "group_pillar", str(group_id) + "_" + formula_name + ".json")
+    system_filename = os.path.join(formula_data_path, "pillar", str(minion_id) + "_" + formula_name + ".json")
     try:
         layout = yaml.load(open(layout_filename).read())
         group_data = json.load(open(group_filename)) if os.path.isfile(group_filename) else {}
@@ -77,7 +81,6 @@ def load_formula_pillar(minion_id, group_id, formula_name):
         log.error('Error loading data for formula "{formula}": {message}'.format(formula=formula_name, message=str(error)))
         return dict()
 
-    log.debug(str(layout))
     return merge_formula_data(layout, group_data, system_data)
 
 def merge_formula_data(layout, group_data, system_data, scope="system"):

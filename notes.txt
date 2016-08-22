@@ -1,0 +1,15 @@
+info for everybody:
+message_queue:
+  host
+  user
+  password
+
+keystone:
+  host
+
+things to do, that are not in the github repo, to get formulas working on SUMA:
+  - update suma_minion.py in /usr/share/susemanager/modules/pillar (file is on github)
+  - include formulas in /usr/share/susemanager/salt/top.sls
+  - create /usr/share/susemanager/salt/formulas directory
+  - add init.sls (also on github) to the directory
+  - add this file root in susemanager.conf: /usr/share/susemanager/salt/formulas

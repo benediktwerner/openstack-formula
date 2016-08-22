@@ -1,4 +1,4 @@
-{% from "openstack/keystone/map.jinja" import server with context %}
+{% from "keystone/map.jinja" import server with context %}
 {% set keystone_connection_args = "
     - connection_token: " + server.service_token + "
     - connection_endpoint: http://" + server.host + ":35357/v2.0"
@@ -55,26 +55,26 @@ memcached:
 # Managing config files
 /etc/keystone/keystone.conf:
   file.managed:
-    - source: salt://openstack/keystone/files/keystone.conf
+    - source: salt://keystone/files/keystone.conf
     - template: jinja
     - require:
       - pkg: keystone_pkgs
 
 /etc/sysconfig/apache2:
   file.managed:
-    - source: salt://openstack/keystone/files/sysconfig-apache2
+    - source: salt://keystone/files/sysconfig-apache2
     - template: jinja
     - require:
       - pkg: keystone_pkgs
 
 /etc/apache2/conf.d/wsgi-keystone.conf:
   file.managed:
-    - source: salt://openstack/keystone/files/wsgi-keystone.conf
+    - source: salt://keystone/files/wsgi-keystone.conf
     - template: jinja
     - require:
       - pkg: keystone_pkgs
 
-{# API v3 required (mikata)
+{# Currently not implemented
 # Creating domains
 {%- if server.get("domain", {}) %}
 
@@ -88,7 +88,7 @@ memcached:
 
 /etc/keystone/domains/keystone.{{ domain_name }}.conf:
   file.managed:
-    - source: salt://openstack/keystone/files/keystone.domain.conf
+    - source: salt://keystone/files/keystone.domain.conf
     - require:
       - file: /etc/keystone/domains
     - watch_in:
@@ -178,7 +178,7 @@ keystone_admin_user:
 # Managing admin login script
 /root/admin-openrc.sh:
   file.managed:
-    - source: salt://openstack/keystone/files/admin-openrc.sh
+    - source: salt://keystone/files/admin-openrc.sh
     - template: jinja
     - require:
       - keystone: keystone_admin_user
@@ -255,3 +255,9 @@ keystone_user_{{ user_name }}:
 
 {% endfor %}
 {% endfor %}
+
+keystone_event:
+  event.send:
+    - name: formula_status
+    - data:
+        message: Installed keystone

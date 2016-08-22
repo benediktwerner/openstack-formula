@@ -12,6 +12,22 @@ neutron:
       $type: password
       $default: secret
 
+    network:
+      $type: group
+
+      name:
+        $default: public
+      cidr:
+        $default: 192.168.100.0/24
+      allocation_start:
+        $default: 192.168.100.220
+      allocation_end:
+        $default: 192.168.100.240
+      gateway:
+        $default: 192.168.100.1
+      dns:
+        $default: 8.8.4.4
+
     database:
       $type: group
 

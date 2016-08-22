@@ -228,6 +228,39 @@ keystone:
           password:
             $type: password
             $default: password
+
+      neutron:
+        $type: group
+
+        type:
+          $default: network
+        description:
+          $default: OpenStack Networking
+        bind:
+          $type: group
+
+          public_port:
+            $type: number
+            $default: 9696
+          public_path:
+            $default: ""
+          internal_port:
+            $type: number
+            $default: 9696
+          internal_path:
+            $default: ""
+          admin_port:
+            $type: number
+            $default: 9696
+          admin_path:
+            $default: ""
+        user:
+          $type: group
+          name:
+            $default: neutron
+          password:
+            $type: password
+            $default: password
 # TEMPORARY CODE END
 
     tenant:

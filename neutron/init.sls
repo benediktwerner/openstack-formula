@@ -105,16 +105,22 @@ neutron_event:
       - service: neutron_services
 
 neutron_create_net:
-  - cmd.run:
+  cmd.run:
     - name: source /root/admin-openrc.sh && neutron net-create public --shared --provider:physical_network public --provider:network_type flat
+    - unless: neutron net-list | grep public
 
 neutron_create_subnet:
-  - cmd.run:
-    - name: neutron subnet-create public 192.168.100.0/24 --name public --allocation-pool start=192.168.100.230,end=192.168.100.250 --dns-nameserver 8.8.4.4 --gateway 192.168.100.1
+  cmd.run:
+    - name: source /root/admin-openrc.sh && neutron subnet-create public {{ server.network.cidr }} --name public --allocation-pool start={{ server.network.allocation_start }},end={{ server.network.allocation_end }} --dns-nameserver {{ server.network.dns }} --gateway {{ server.network.gateway }}
+    - unless: neutron subnet-list | grep {{ server.network.cidr }}
+
+
 neutron_secgroup_icmp:
-  - cmd.run:
+  cmd.run:
     - name: source /root/admin-openrc.sh && nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
+    - unless: nova secgroup-list-rules default | grep icmp | grep 0.0.0.0/0
 
 neutron_secgroup_ssh:
-  - cmd.run:
-    - nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+  cmd.run:
+    - name: source /root/admin-openrc.sh && nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
+    - unless: nova secgroup-list-rules default | grep tcp | grep 0.0.0.0/0 | grep 22

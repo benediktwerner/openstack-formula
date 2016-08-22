@@ -65,12 +65,13 @@ nova_event:
 nova_create_ssh_key:
   cmd.run:
     - name: ssh-keygen -q -N "" -f ~/.ssh/id_rsa
-    - creates: ~/.ssh/id_rsa
+    - creates: /root/.ssh/id_rsa
     - requires:
       - service: nova_services
 
 nova_add_ssh_key:
   cmd.run:
-    - name: source /root/admin-openrc.sh && nova keypair-add --pub-key ~/.ssh/id_rsa.pub mykey
-    - watch: nova_create_ssh_key
+    - name: source /root/admin-openrc.sh && nova keypair-add --pub-key /root/.ssh/id_rsa.pub mykey
+    - require:
+      - cmd: nova_create_ssh_key
     - unless: source /root/admin-openrc.sh && openstack keypair list | grep mykey

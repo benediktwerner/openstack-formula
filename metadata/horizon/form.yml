@@ -1,0 +1,8 @@
+horizon:
+  $type: hidden-group
+
+  server:
+    $type: hidden-group
+
+    host:
+      $default: controller

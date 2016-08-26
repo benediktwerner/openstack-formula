@@ -1,0 +1,61 @@
+neutron:
+  $type: hidden-group
+
+  server:
+    $type: hidden-group
+
+    host:
+      $default: controller
+    physical_public_interface_name:
+      $default: eth0
+
+    database:
+      $type: group
+      $scope: readonly
+
+      name:
+        $default: neutron
+      user:
+        $default: neutron
+      password:
+        $scope: group
+        $type: password
+
+    endpoints:
+      $type: group
+
+      public_port:
+        $type: number
+        $default: 9696
+      public_path:
+        $default: ""
+      internal_port:
+        $type: number
+        $default: 9696
+      internal_path:
+        $default: ""
+      admin_port:
+        $type: number
+        $default: 9696
+      admin_path:
+        $default: ""
+
+    network:
+      $type: group
+
+      create_network:
+        $type: boolean
+        $default: true
+      name:
+        $default: public
+      cidr:
+        $name: CIDR
+        $default: 192.168.100.0/24
+      allocation_start:
+        $default: 192.168.100.100
+      allocation_end:
+        $default: 192.168.100.120
+      gateway:
+        $default: 192.168.100.1
+      dns:
+        $default: 8.8.4.4

@@ -1,0 +1,12 @@
+nova:
+  $type: hidden-group
+
+  compute:
+    $type: hidden-group
+
+    ip:
+      $default: 10.0.0.31
+    vnc_listen:
+      $default: 0.0.0.0
+    novnc_base_url:
+      $default: http://controller:6080/vnc_auto.html

@@ -1,8 +1,0 @@
-horizon:
-  $type: group
-
-  server:
-    $type: hidden-group
-
-    host:
-      $default: localhost

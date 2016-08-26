@@ -1,0 +1,9 @@
+controller:
+  $type: hidden-group
+
+  server:
+    $type: hidden-group
+
+    ip:
+      $name: IP
+      $default: 11.0.0.11

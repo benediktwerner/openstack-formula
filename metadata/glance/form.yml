@@ -1,0 +1,57 @@
+glance:
+  $type: hidden-group
+
+  server:
+    $type: hidden-group
+
+    database:
+      $type: group
+      $scope: readonly
+
+      name:
+        $default: glance
+      user:
+        $default: glance
+      password:
+        $scope: group
+        $type: password
+
+    endpoints:
+      $type: group
+
+      public_port:
+        $type: number
+        $default: 9292
+      public_path:
+        $default: ""
+      internal_port:
+        $type: number
+        $default: 9292
+      internal_path:
+        $default: ""
+      admin_port:
+        $type: number
+        $default: 9292
+      admin_path:
+        $default: ""
+
+    image:
+      $name: Upload image
+      $type: group
+
+      name:
+        $default: cirros
+      url:
+        $default: http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+      visibility:
+        $type: select
+        $values: ["public", "privat"]
+        $default: public
+      disk_format:
+        $type: select
+        $values: ["raw", "vhd", "vhdx", "vmdk", "vdi", "iso", "qcow2", "aki", "ari", "ami"]
+        $default: qcow2
+      container_format:
+        $type: select
+        $values: ["bare", "ovf", "aki", "ari", "ami", "ova", "docker"]
+        $default: bare

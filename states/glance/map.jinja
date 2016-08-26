@@ -1,0 +1,8 @@
+{% set server = salt['grains.filter_by']({
+    'Suse': {
+        'pkgs': ['openstack-glance', 'python-glanceclient'],
+        'services': ['openstack-glance-api', 'openstack-glance-registry']
+    },
+}, merge=salt['pillar.get']('glance:server')) %}
+
+{% set openstack =  salt['pillar.get']('openstack', {}) %}

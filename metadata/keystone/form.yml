@@ -1,0 +1,55 @@
+keystone:
+  $type: hidden-group
+
+  server:
+    $type: hidden-group
+
+    host:
+      $default: controller
+    admin_name:
+      $default: admin
+    admin_password:
+      $type: password
+    admin_email:
+      $type: email
+      $default: root@localhost
+
+    database:
+      $type: group
+      $scope: readonly
+
+      name:
+        $default: keystone
+      user:
+        $default: keystone
+      password:
+        $scope: group
+        $type: password
+
+    cache:
+      $type: group
+
+      host:
+        $default: localhost
+      port:
+        $type: number
+        $default: 11211
+
+    endpoints:
+      $type: group
+
+      public_port:
+        $type: number
+        $default: 5000
+      public_path:
+        $default: /v2.0
+      internal_port:
+        $type: number
+        $default: 5000
+      internal_path:
+        $default: /v2.0
+      admin_port:
+        $type: number
+        $default: 35357
+      admin_path:
+        $default: /v2.0

@@ -1,6 +1,0 @@
-{% set server = salt['grains.filter_by']({
-    'Suse': {
-        'pkgs': ['openstack-keystone', 'apache2-mod_wsgi', 'memcached', 'python-python-memcached'],
-        'roles': ['admin', 'user']
-    },
-}, merge=salt['pillar.get']('keystone:server')) %}

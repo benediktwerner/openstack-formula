@@ -1,0 +1,9 @@
+neutron:
+  $type: hidden-group
+
+  compute:
+    $type: hidden-group
+
+    physical_public_interface_name:
+      $default: eth0
+

@@ -1,0 +1,9 @@
+
+{% set compute = salt['grains.filter_by']({
+    'Suse': {
+        'pkgs': ['openstack-neutron-linuxbridge-agent', 'ipset'],
+        'services': ['openstack-neutron-linuxbridge-agent']
+    },
+}, merge=salt['pillar.get']('neutron:compute')) %}
+
+{% set openstack =  salt['pillar.get']('openstack', {}) %}

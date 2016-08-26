@@ -1,0 +1,61 @@
+openstack:
+  $type: hidden-group
+  $scope: group
+
+  database:
+    $type: group
+    host:
+      $default: controller
+
+  message_queue:
+    $type: group
+
+    host:
+      $default: controller
+    user:
+      $default: openstack
+    password:
+      $type: password
+
+  identity:
+    $type: group
+
+    host:
+      $default: controller
+    admin_token:
+      $type: password
+
+  glance:
+    $type: group
+
+    host:
+      $default: controller
+    user:
+      $default: glance
+    password:
+      $type: password
+
+  nova:
+    $type: group
+
+    host:
+      $default: controller
+    user:
+      $default: nova
+    password:
+      $type: password
+
+  neutron:
+    $type: group
+
+    host:
+      $default: controller
+    port:
+      $type: number
+      $default: 9696
+    user:
+      $default: neutron
+    password:
+      $type: password
+    metadata_secret:
+      $type: password

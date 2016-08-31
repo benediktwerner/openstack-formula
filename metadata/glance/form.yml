@@ -13,7 +13,7 @@ glance:
       user:
         $default: glance
       password:
-        $scope: group
+        $scope: system
         $type: password
 
     endpoints:
@@ -39,6 +39,9 @@ glance:
       $name: Upload image
       $type: group
 
+      upload_image:
+        $type: boolean
+        $default: true
       name:
         $default: cirros
       url:

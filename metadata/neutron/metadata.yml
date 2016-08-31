@@ -2,3 +2,5 @@ after:
   - keystone
   - glance
   - nova
+group:
+  openstack-controller

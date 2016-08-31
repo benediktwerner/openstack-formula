@@ -18,7 +18,7 @@ neutron:
       user:
         $default: neutron
       password:
-        $scope: group
+        $scope: system
         $type: password
 
     endpoints:
@@ -50,12 +50,12 @@ neutron:
         $default: public
       cidr:
         $name: CIDR
-        $default: 192.168.100.0/24
+        $default: 192.168.124.0/24
       allocation_start:
-        $default: 192.168.100.100
+        $default: 192.168.124.100
       allocation_end:
-        $default: 192.168.100.120
+        $default: 192.168.124.120
       gateway:
-        $default: 192.168.100.1
+        $default: 192.168.124.1
       dns:
         $default: 8.8.4.4

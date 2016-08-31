@@ -155,10 +155,11 @@ neutron_secgroup_ssh:
   cmd.run:
     - name: source /root/admin-openrc.sh && nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
     - unless: source /root/admin-openrc.sh && nova secgroup-list-rules default | grep tcp | grep 0.0.0.0/0 | grep 22
+{% endif %}
 
 controller_finished_event:
   event.send:
     - name: formula_status
     - data:
         message: Finished installation on {{ grains.id }}
-{% endif %}
+

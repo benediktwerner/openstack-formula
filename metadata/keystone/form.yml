@@ -23,7 +23,7 @@ keystone:
       user:
         $default: keystone
       password:
-        $scope: group
+        $scope: system
         $type: password
 
     cache:

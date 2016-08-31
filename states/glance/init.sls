@@ -112,6 +112,7 @@ glance_event:
     - require:
       - service: glance_services
 
+{% if server.image.upload_image %}
 glance_download_image:
   cmd.run:
     - name: curl -L {{ server.image.url }} -o /tmp/{{server.image.name }}
@@ -126,6 +127,7 @@ glance_upload_image:
     - unless: source /root/admin-openrc.sh && openstack image list | grep {{ server.image.name }}
     - require:
       - cmd: glance_download_image
+{% endif %}
 
 image_event:
   event.send:

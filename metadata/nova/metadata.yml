@@ -1,5 +1,0 @@
-after:
-  - keystone
-  - glance
-group:
-  openstack-controller

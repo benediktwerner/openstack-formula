@@ -1,4 +1,0 @@
-after:
-  - nova-compute
-group:
-  openstack-compute

@@ -42,7 +42,7 @@ neutron_finished_event:
     - data:
         status: Finished installing neutron compute
     - require:
-        - services: neutron_services
+        - service: neutron_services
 
 neutron_failed_event:
   event.send:

@@ -115,7 +115,7 @@ glance_uploading_event:
   event.send:
     - name: formula_status
     - data:
-        message: Uploading image: {{ server.image.name }}
+        message: 'Uploading image: {{ server.image.name }}'
     - require:
       - service: glance_services
 

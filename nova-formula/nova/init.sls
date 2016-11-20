@@ -113,7 +113,7 @@ nova_create_ssh_key:
 nova_add_ssh_key:
   cmd.run:
     - name: source /root/admin-openrc.sh && nova keypair-add --pub-key /root/.ssh/id_rsa.pub mykey
-  - unless: source /root/admin-openrc.sh && openstack keypair list | grep mykey
+    - unless: source /root/admin-openrc.sh && openstack keypair list | grep mykey
     - require:
       - cmd: nova_create_ssh_key
 
